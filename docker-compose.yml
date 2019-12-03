@@ -31,5 +31,5 @@ services:
     ports:
       - "9669:9669"
     environment:
-      - LIST_OF_SERVERS=worker1:9551
+      - LIST_OF_SERVERS=worker1:9551,worker2:9552,worker3:9553
       - SPRING_PROFILES_ACTIVE=dev

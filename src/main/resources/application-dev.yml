@@ -1,0 +1,18 @@
+# enable Actuator's endpoints disabled by default at Spring 2.x
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+# enable debugging requests
+zuul:
+  include-debug-header: true
+
+# Load balancer logging in order to check that Ribbon forward requests to different service instances
+logging:
+  level:
+    com:
+      netflix:
+        loadbalancer:
+          LoadBalancerContext: DEBUG

@@ -1,0 +1,4 @@
+# disable list Zuul filters/routes endpoints added by default with @EnableZuulProxy
+endpoints:
+  routes:
+    enabled: false

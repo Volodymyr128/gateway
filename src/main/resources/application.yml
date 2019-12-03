@@ -1,7 +1,6 @@
 server:
   port: 9669
 
-# API Gateway config
 zuul:
   routes:
     get-fortune:
@@ -12,44 +11,29 @@ zuul:
       # do not pass sensitive headers to downstream services
       sensitiveHeaders: Cookie,Set-Cookie,Authorization
 
-# Load Balancer config
 ribbon:
-  # disable service registry, use hardcoded list
   eureka:
     enabled: false
-  # make Ribbon to fail-fast on startup if client list is configured in a wrong way (lazy loading on first call by default)
-  eager-load:
+  # Obsolete option (Apache HttpClient by default), but without this Ribbon doesn't retry against another instances
+  restclient:
     enabled: true
-    clients: fortune
+
+hystrix:
+  command:
+    fortune:
+      execution:
+        isolation:
+          thread:
+            # should be little bit bigger than Ribbon's ConnectTimeout + ReadTimeout
+            timeoutInMilliseconds: 5500
 
 fortune:
   ribbon:
+    OkToRetryOnAllOperations: false
+    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.AvailabilityFilteringRule #WeightedResponseTimeRule
     listOfServers: ${LIST_OF_SERVERS}
-    ConnectTimeout: 1000
-    ReadTimeout: 5000
-    MaxAutoRetries: 1
-    MaxTotalHttpConnections: 500
-    MaxConnectionsPerHost: 1 # use it?
-    ServerListRefreshInterval: 15000
-
----
-
-spring:
-  profiles: dev
-
-# enable Actuator's endpoints disabled by default at Spring 2.x
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-
----
-
-spring:
-  profiles: prod
-
-# disable list Zuul filters/routes endpoints added by default with @EnableZuulProxy
-endpoints:
-  routes:
-    enabled: false
+    ConnectTimeout: 500
+    ReadTimeout: 4500
+    MaxAutoRetries: 0
+    MaxAutoRetriesNextServer: 3
+    retryableStatusCodes: 404,502,503,504
