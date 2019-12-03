@@ -1,0 +1,35 @@
+version: "3"
+services:
+
+  worker1:
+    image: thereisnospoon/wm-test-worker:0.1.1
+    ports:
+      - "9551:9551"
+    environment:
+      - WORKER_PORT=9551
+
+  worker2:
+    image: thereisnospoon/wm-test-worker:0.1.1
+    ports:
+      - "9552:9552"
+    environment:
+      - WORKER_PORT=9552
+
+  worker3:
+    image: thereisnospoon/wm-test-worker:0.1.1
+    ports:
+      - "9553:9553"
+    environment:
+      - WORKER_PORT=9553
+
+  gateway:
+    image: gateway
+    depends_on:
+      - worker1
+      - worker2
+      - worker3
+    ports:
+      - "9669:9669"
+    environment:
+      - LIST_OF_SERVERS=worker1:9551
+      - SPRING_PROFILES_ACTIVE=dev

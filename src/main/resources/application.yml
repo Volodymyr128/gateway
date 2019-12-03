@@ -1,0 +1,55 @@
+server:
+  port: 9669
+
+# API Gateway config
+zuul:
+  routes:
+    get-fortune:
+      # service name
+      serviceId: fortune
+      # pattern for allowed paths
+      path: /get-fortune
+      # do not pass sensitive headers to downstream services
+      sensitiveHeaders: Cookie,Set-Cookie,Authorization
+
+# Load Balancer config
+ribbon:
+  # disable service registry, use hardcoded list
+  eureka:
+    enabled: false
+  # make Ribbon to fail-fast on startup if client list is configured in a wrong way (lazy loading on first call by default)
+  eager-load:
+    enabled: true
+    clients: fortune
+
+fortune:
+  ribbon:
+    listOfServers: ${LIST_OF_SERVERS}
+    ConnectTimeout: 1000
+    ReadTimeout: 5000
+    MaxAutoRetries: 1
+    MaxTotalHttpConnections: 500
+    MaxConnectionsPerHost: 1 # use it?
+    ServerListRefreshInterval: 15000
+
+---
+
+spring:
+  profiles: dev
+
+# enable Actuator's endpoints disabled by default at Spring 2.x
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+---
+
+spring:
+  profiles: prod
+
+# disable list Zuul filters/routes endpoints added by default with @EnableZuulProxy
+endpoints:
+  routes:
+    enabled: false
