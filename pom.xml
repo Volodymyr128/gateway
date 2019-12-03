@@ -16,6 +16,9 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <junit.version>4.12</junit.version>
+        <wiremock.version>2.2.0.RELEASE</wiremock.version>
+        <lombok.version>1.18.10</lombok.version>
         <spring-cloud.version>Hoxton.RELEASE</spring-cloud.version>
     </properties>
 
@@ -41,6 +44,27 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-contract-wiremock</artifactId>
+            <version>${wiremock.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
     </dependencies>
 
     <dependencyManagement>
