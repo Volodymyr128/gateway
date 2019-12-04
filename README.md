@@ -2,7 +2,8 @@
 
 In order to test solution:
 
-1. Update `LIST_OF_SERVERS` in `docker-compose.yml` if needed
+0. Open [docker-compose.yml](https://github.com/Volodymyr128/gateway/blob/master/docker-compose.yml)
+1. Update `LIST_OF_SERVERS` if needed
 2. Run everything by `docker-compose up -d`
 3. Query API Gateway with `docker exec -it <gateway_container_id> curl -X GET localhost:9669/get-fortune`.
    See "Faced issues", can't trigger APIs from outside Docker network on Windows.

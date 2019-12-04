@@ -23,7 +23,7 @@ services:
       - WORKER_PORT=9553
 
   gateway:
-    image: gateway
+    image: volodymyr128/gateway
     depends_on:
       - worker1
       - worker2
