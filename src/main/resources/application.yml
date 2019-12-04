@@ -4,9 +4,7 @@ server:
 zuul:
   routes:
     get-fortune:
-      # service name
       serviceId: fortune
-      # pattern for allowed paths
       path: /get-fortune
       # do not pass sensitive headers to downstream services
       sensitiveHeaders: Cookie,Set-Cookie,Authorization
@@ -21,6 +19,9 @@ ribbon:
 hystrix:
   command:
     fortune:
+      circuitBreaker:
+        sleepWindowInMilliseconds: 3000
+        errorThresholdPercentage: 90
       execution:
         isolation:
           thread:
@@ -30,10 +31,10 @@ hystrix:
 fortune:
   ribbon:
     OkToRetryOnAllOperations: false
-    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.AvailabilityFilteringRule #WeightedResponseTimeRule
+    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.WeightedResponseTimeRule
     listOfServers: ${LIST_OF_SERVERS}
     ConnectTimeout: 500
     ReadTimeout: 4500
     MaxAutoRetries: 0
-    MaxAutoRetriesNextServer: 3
+    MaxAutoRetriesNextServer: 1000
     retryableStatusCodes: 404,502,503,504
